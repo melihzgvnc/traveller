@@ -16,8 +16,8 @@ class Weather:
 
   def __init__(self, destination, start_date, end_date = None) -> None:
     self.destination = destination
-    self.start_date = start_date
-    self.end_date = end_date if end_date else start_date
+    self.start_date = datetime.date(pd.to_datetime(start_date))
+    self.end_date = datetime.date(pd.to_datetime(end_date)) if end_date else self.start_date
     self.geoloc = self.get_geolocation()
     self.weather_data = self.get_weather_data()
 
@@ -61,10 +61,10 @@ class Weather:
     daily_temperature_2m_min = daily.Variables(1).ValuesAsNumpy()
     
     daily_data = {"date": pd.date_range(
-    	start = pd.to_datetime(daily.Time(), unit = "s", utc = True),
-    	end = pd.to_datetime(daily.TimeEnd(), unit = "s", utc = True),
-    	freq = pd.Timedelta(seconds = daily.Interval()),
-    	inclusive = "left"
+    	start = pd.to_datetime(daily.Time(), unit = "s", utc = True).strftime("%Y-%m-%d"),
+	    end = pd.to_datetime(daily.TimeEnd(), unit = "s", utc = True).strftime("%Y-%m-%d"),
+	    #freq = pd.Timedelta(seconds = daily.Interval()),
+	    inclusive = "left"
     )}
     
     daily_data["temperature_2m_max"] = daily_temperature_2m_max
@@ -74,12 +74,21 @@ class Weather:
     return daily_dataframe
   
   def calculate_avg(self):
-    start = self.weather_data[self.weather_data.date == pd.to_datetime(self.start_date)].index[0]
-    end = self.weather_data[self.weather_data.date == pd.to_datetime(self.end_date)].index[0]
+    
+    start_date = pd.to_datetime(self.start_date.replace(year=2024))
+    end_date = pd.to_datetime(self.end_date.replace(year=2024))
+    # print(start_date)
+    # print(self.weather_data[self.weather_data.date == start_date])
+    start = self.weather_data[self.weather_data.date == start_date].index[0]
+    end = self.weather_data[self.weather_data.date == end_date].index[0]
 
+    if start == end:
+       end += 1
+    
     pilot_df = self.weather_data.iloc[start:end]
+    
     sum_max = pilot_df.temperature_2m_max.sum()/len(pilot_df.temperature_2m_min)
     sum_min = pilot_df.temperature_2m_min.sum()/len(pilot_df.temperature_2m_min)
     avg_temp = (sum_max+sum_min)/2
-    
+
     return avg_temp    
