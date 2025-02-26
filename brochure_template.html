@@ -3,7 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Welcome to Istanbul</title>
+    <title>Welcome</title>
+
     <style>
       body {
         margin: 0;
@@ -160,29 +161,27 @@
         <span class="sun-icon">☀️</span>
         <div>
           <div>AVERAGE TEMPERATURE</div>
-          <div style="font-size: 24px">15C</div>
+          <div style="font-size: 24px">{{temperature}}</div>
         </div>
       </div>
 
       <img
-        src="istanbul-image.jpg"
-        alt="Istanbul cityscape"
+        src="{{destination}}-image.jpg"
+        alt="{{destination}} cityscape"
         class="city-image"
       />
 
       <div class="welcome-text">
-        <h1>Welcome to<br />istanbul!</h1>
+        <h1>Welcome to<br />{{destination}}!</h1>
       </div>
 
       <div class="info-grid">
         <div class="info-box">
           <h2>Attraction</h2>
           <ul>
-            <li>sultanahmet</li>
-            <li>galata</li>
-            <li>topkapi sarayı</li>
-            <li>aya sofya</li>
-            <li>kız kulesi</li>
+            {% for each in attractions %}
+            <li>{{each}}</li>
+            {% endfor %}
           </ul>
         </div>
 
