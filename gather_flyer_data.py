@@ -3,39 +3,34 @@ from get_sights import get_top_sights
 from get_weather import Weather
 from generate_image import generate_image
 from jinja2 import Template
+import weasyprint
 import asyncio
-from playwright.async_api import async_playwright
+from playwright.sync_api import sync_playwright
 
-with open("data.json", "r") as f:
-  data = json.load(f)
 
-destination = data["destination"]
+def gather_data():
 
-# Generate image
-generate_image(destination)
+  with open("data.json", "r") as f:
+    data = json.load(f)
 
-# Fetch weather data
-weather = Weather(**data)
-avg_temp = weather.calculate_avg()
+  destination = data["destination"]
 
-# Fetch sights data
-top_sights = get_top_sights(destination)
+  # Generate image
+  #generate_image(destination)
 
-with open("brochure_template.html", "r", encoding="utf8") as file:
-    html_template = file.read()
+  # Fetch weather data
+  weather = Weather(**data)
+  avg_temp = weather.calculate_avg()
 
-# Create and render the template to HTML string
-template = Template(html_template)
-rendered_html = template.render(destination=destination, temperature=avg_temp, attractions=top_sights)
+  # Fetch sights data
+  top_sights = get_top_sights(destination)
 
-async def html_to_pdf(html_content, output_path):
-    async with async_playwright() as p:
-        browser = await p.chromium.launch()
-        page = await browser.new_page()
-        await page.set_content(html_content)
-        await page.pdf(path=output_path)
-        await browser.close()
+  with open("brochure_template.html", "r", encoding="utf8") as file:
+      html_template = file.read()
 
-output_path = 'custom-html-to-pdf-output.pdf'
-# Pass the rendered HTML string to the function
-asyncio.run(html_to_pdf(rendered_html, output_path))
+  # Create and render the template to HTML string
+  template = Template(html_template)
+  rendered_html = template.render(destination=destination, temperature=avg_temp, attractions=top_sights)
+
+
+  weasyprint.HTML(string=str(rendered_html)).write_pdf(f"{destination}-flyer.pdf")
