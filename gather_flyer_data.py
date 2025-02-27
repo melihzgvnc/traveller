@@ -1,6 +1,7 @@
 import json
 from get_sights import get_top_sights
 from get_weather import Weather
+from generate_image import generate_image
 from jinja2 import Template
 import asyncio
 from playwright.async_api import async_playwright
@@ -10,19 +11,15 @@ with open("data.json", "r") as f:
 
 destination = data["destination"]
 
-#fetching weather data
+# Generate image
+generate_image(destination)
+
+# Fetch weather data
 weather = Weather(**data)
 avg_temp = weather.calculate_avg()
-data["temperature"] = avg_temp 
 
-#fetching sights data
+# Fetch sights data
 top_sights = get_top_sights(destination)
-print(top_sights)
-data["attractions"] = top_sights
-
-with open("data.json", "w") as f:
-  json.dump(data, f)
-
 
 with open("brochure_template.html", "r", encoding="utf8") as file:
     html_template = file.read()
