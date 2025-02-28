@@ -33,4 +33,4 @@ def gather_data():
   rendered_html = template.render(destination=destination, temperature=avg_temp, attractions=top_sights)
 
 
-  weasyprint.HTML(string=str(rendered_html)).write_pdf(f"{destination}-flyer.pdf")
+  weasyprint.HTML(string=str(rendered_html), base_url=".").write_pdf(f"{destination}-flyer.pdf")
