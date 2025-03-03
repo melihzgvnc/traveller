@@ -81,7 +81,11 @@ def get_flight_tickets(
     """
 
     with open('data.json', 'w') as f:
-        json.dump({"destination": city}, f)
+        json.dump({
+            "destination": city,
+            "start_date": outbound_date,
+            "end_date": return_date if isinstance(return_date, str) else outbound_date
+            }, f)
 
     load_dotenv()
     os.environ["SERPAPI_KEY"] = os.getenv("SERPAPI_KEY")

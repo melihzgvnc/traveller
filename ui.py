@@ -2,44 +2,10 @@ import streamlit as st
 import json
 from llm import run
 from langchain_core.messages import ToolMessage
+from gather_flyer_data import gather_data
 
 st.title("Travel Assistant")
 
-"""
-def generate_response(query):
-    output = run(query)
-    print(output) # -> this here is the key to see tool calls!!!!!!!!!!
-    kwargs = output["messages"][-1].additional_kwargs
-    response = output["messages"][-1].content
-    return (response, kwargs)
-
-if "messages" not in st.session_state:
-  st.session_state.messages = []
-
-for message in st.session_state.messages:
-  with st.chat_message(message["role"]):
-    st.markdown(message["content"])
-
-if prompt := st.chat_input("What's up?"):
-  st.session_state.messages.append({"role": "user", "content": prompt})
-
-  with st.chat_message("user"):
-    st.markdown(prompt)
-
-  with st.chat_message("assistant"):
-    response, kwargs = generate_response(prompt)
-    st.markdown(response)
-    st.session_state.messages.append({"role": "assistant", "content": response})
-    
-    # Add button to sidebar
-    with st.sidebar:
-        tool_calls_exist = 'tool_calls' in kwargs
-        button = st.button(
-            "Execute Tool Call", 
-            disabled=tool_calls_exist,
-            key=f"tool_button_{len(st.session_state.messages)}"
-        )
-    """
 
 with open("data.json", "r") as f:
   data = json.load(f)
@@ -84,8 +50,31 @@ with st.sidebar:
   if st.session_state.tool_called:
       tool_call_exist = True
   
-  button = st.button(
-    f"Create Flyer for {data['destination']}",
+  generate_button = st.button(
+    f"Design Flyer",
     disabled=not tool_call_exist,
-    key="flyer_button"
+    key="generate_flyer_button",
+    type="primary"
   )
+
+  if generate_button:
+    gather_data()
+    st.write("Your flyer has been designed successfully!")
+
+    # Change regular button to download_button
+    with open(f"{data['destination']}-flyer.pdf", "rb") as pdf_file:
+      st.download_button(
+          label="Download your unique flyer",
+          data=pdf_file,
+          file_name=f"{data['destination']}-flyer.pdf",
+          mime="application/pdf",
+          key="download_flyer_button"  # Fixed typo in key name
+      )
+
+    with open(f"{data['destination']}.jpg", "rb") as file:
+      st.download_button(
+          label="Download the AI Art",
+          data=file,
+          file_name=f"{data['destination']}.jpg",
+          mime="image/jpg",
+      )

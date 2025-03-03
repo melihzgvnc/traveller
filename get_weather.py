@@ -91,4 +91,4 @@ class Weather:
     sum_min = pilot_df.temperature_2m_min.sum()/len(pilot_df.temperature_2m_min)
     avg_temp = (sum_max+sum_min)/2
 
-    return avg_temp    
+    return np.float64(avg_temp)    

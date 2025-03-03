@@ -53,7 +53,7 @@ def call_model(state: MessagesState):
     if response.additional_kwargs.get("tool_calls"):
         tool_calls = response.additional_kwargs["tool_calls"]
         for tool_call in tool_calls:
-            print(tool_call)
+            #print(tool_call)
             tool_name = tool_call["function"]["name"]
             tool_args = tool_call["function"]["arguments"]
             tool_args = json.loads(tool_args)
