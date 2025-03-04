@@ -17,16 +17,11 @@
         align-items: center;
         max-width: 210mm;
         margin: 0 auto;
+        color: #333333;
       }
 
       @media print {
         body {
-          background: linear-gradient(
-            180deg,
-            #1a75ff 0%,
-            #66b3ff 50%,
-            #99ccff 100%
-          );
           -webkit-print-color-adjust: exact !important;
           print-color-adjust: exact !important;
           padding: 0;
@@ -37,6 +32,10 @@
         .card-container {
           page-break-inside: avoid;
           box-shadow: none;
+          background-image: url("Paris.jpg");
+          background-size: cover;
+          background-position: center;
+          background-repeat: no-repeat;
         }
 
         .temp-widget,
@@ -52,7 +51,7 @@
         }
 
         .info-box {
-          background-color: #ffa500 !important;
+          background-color: rgba(255, 166, 0, 0.75) !important;
         }
 
         @page {
@@ -67,25 +66,28 @@
         width: 100%;
         max-width: 190mm;
         text-align: center;
-        background: linear-gradient(
-          180deg,
-          #1a75ff 0%,
-          #66b3ff 50%,
-          #99ccff 100%
-        );
         padding: 20px;
+        background-image: linear-gradient(
+            rgba(170, 170, 170, 0.6),
+            rgba(171, 171, 171, 0.6)
+          ),
+          url("Paris.jpg");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
         border-radius: 15px;
         box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
       }
 
       .temp-widget {
-        background-color: #004d99;
+        background-color: rgba(0, 77, 153, 0.8);
         color: white;
-        padding: 10px 20px;
+        padding: 15px 15px;
         border-radius: 15px;
         display: inline-flex;
-        align-items: center;
         gap: 10px;
+        justify-content: center;
+        align-content: center;
         margin-bottom: 20px;
       }
 
@@ -98,46 +100,41 @@
         width: 150px;
         height: 150px;
         object-fit: cover;
-        border-radius: 10px;
+        border-radius: 15px;
         margin: 20px;
       }
 
       .welcome-text {
-        background-color: rgba(255, 255, 255, 0.9);
         padding: 20px;
-        margin: 20px 0;
+        margin: 10px 0;
+        letter-spacing: 6px;
       }
 
       h1 {
-        font-size: 48px;
+        font-size: 52px;
         margin: 0;
-        color: #000;
-        text-transform: lowercase;
-      }
-
-      h1::first-letter {
         text-transform: uppercase;
+        font-weight: 800;
       }
 
       .info-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 20px;
+        display: flex;
         margin-top: 20px;
+        justify-content: center;
       }
 
       .info-box {
-        background-color: #ffa500;
+        background-color: rgba(255, 166, 0, 0.75);
         padding: 20px;
-        border-radius: 10px;
+        border-radius: 15px;
         text-align: left;
         break-inside: avoid;
         margin-bottom: 15px;
+        width: 50%;
       }
 
       .info-box h2 {
         margin-top: 0;
-        color: #000;
         font-size: 24px;
       }
 
@@ -150,7 +147,6 @@
 
       .info-box li {
         margin: 10px 0;
-        color: #000;
         line-height: 1.4;
       }
     </style>
@@ -158,18 +154,8 @@
   <body>
     <div class="card-container">
       <div class="temp-widget">
-        <span class="sun-icon">☀️</span>
-        <div>
-          <div>AVERAGE TEMPERATURE</div>
-          <div style="font-size: 24px">{{temperature}}</div>
-        </div>
+        <div style="font-size: 18px">⛅ {{temperature}}°C</div>
       </div>
-
-      <img
-        src="{{destination}}-image.jpg"
-        alt="{{destination}} cityscape"
-        class="city-image"
-      />
 
       <div class="welcome-text">
         <h1>Welcome to<br />{{destination}}!</h1>
@@ -177,22 +163,11 @@
 
       <div class="info-grid">
         <div class="info-box">
-          <h2>Attraction</h2>
+          <h2>Popular Attractions</h2>
           <ul>
             {% for each in attractions %}
             <li>{{each}}</li>
             {% endfor %}
-          </ul>
-        </div>
-
-        <div class="info-box">
-          <h2>Food</h2>
-          <ul>
-            <li>simit</li>
-            <li>börek</li>
-            <li>döner kebap</li>
-            <li>mantı</li>
-            <li>lahmacun</li>
           </ul>
         </div>
       </div>
